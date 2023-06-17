@@ -4,13 +4,13 @@ from sqlalchemy import create_engine
 
 
 def load_data(messages_filepath, categories_filepath):
-    messages = pd.read_csv('messages.csv')
-    categories = pd.read_csv('categories.csv')
+    messages = pd.read_csv(messages_filepath)
+    categories = pd.read_csv(categories_filepath)
     # merge datasets
     df = pd.merge(messages, categories, on='id')
     return df
 
-## TO DO: split out column encoding
+
 def clean_data(df):
     # create a dataframe of the 36 individual category columns
     categories = df['categories'].str.split(pat=';', expand=True)
@@ -43,7 +43,7 @@ def clean_data(df):
 
 
 def save_data(df, database_filename):
-    engine = create_engine(database_filename)
+    engine = create_engine('sqlite:///'+database_filename)
     df.to_sql('Disaster_Messages', engine, index=False)
 
 
